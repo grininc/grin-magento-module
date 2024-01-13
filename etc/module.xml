@@ -4,6 +4,7 @@
     <module name="Grin_Module">
         <sequence>
             <module name="Magento_SalesRule"/>
+            <module name="Magento_ConfigurableProduct"/>
         </sequence>
     </module>
 </config>
