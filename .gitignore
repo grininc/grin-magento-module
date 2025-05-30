@@ -1,1 +1,13 @@
 vendor
+
+# Ignore Magento installation
+scripts/magento-auth.env
+.docker-magento/
+
+# Ignore Docker-related files
+compose*.yaml
+Makefile
+bin/
+env/
+template/
+
