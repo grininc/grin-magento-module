@@ -155,3 +155,7 @@ If you encounter any issues:
    ```bash
    bin/clinotty tail -f var/log/system.log
    ```
+
+### Credits
+
+This local development setup is based on [markshust/docker-magento](https://github.com/markshust/docker-magento). 
