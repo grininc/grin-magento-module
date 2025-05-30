@@ -141,11 +141,13 @@ If you encounter any issues:
 
 1. Check if the module is properly enabled:
    ```bash
+   cd .docker-magento
    bin/clinotty bin/magento module:status Grin_Module
    ```
 
 2. If the module is disabled, try re-enabling it:
    ```bash
+   cd .docker-magento
    bin/clinotty bin/magento module:enable Grin_Module --force
    bin/clinotty bin/magento setup:upgrade
    bin/clinotty bin/magento cache:flush
@@ -153,6 +155,7 @@ If you encounter any issues:
 
 3. Check the Magento logs in the container:
    ```bash
+   cd .docker-magento
    bin/clinotty tail -f var/log/system.log
    ```
 
