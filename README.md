@@ -2,9 +2,25 @@
 
 Influencer marketing for ecommerce. For more information go to https://grin.co/
 
+## Table of Contents
 
-Install
--
+- [Install](#install)
+- [Update](#update)
+- [Some notes](#some-notes)
+- [Q&A](#qa)
+- [Local Development](#local-development)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Installing Sample Data](#installing-sample-data)
+  - [Port Configuration](#port-configuration)
+  - [Getting Required Credentials](#getting-required-credentials)
+  - [Setup Steps](#setup-steps)
+  - [Development Workflow](#development-workflow)
+  - [Troubleshooting](#troubleshooting)
+  - [Running Unit Tests](#running-unit-tests)
+- [Credits](#credits)
+
+## Install
 
 1. composer config repositories.grin vcs https://github.com/grininc/grin-magento-module
 2. composer require grin/module
@@ -13,8 +29,7 @@ Install
 5. bin/magento setup:static-content:deploy
 6. bin/magento cache:flush
 
-Update
--
+## Update
 
 1. composer update grin/module
 2. bin/magento setup:upgrade
@@ -22,16 +37,14 @@ Update
 4. bin/magento setup:static-content:deploy
 5. bin/magento cache:flush
 
-Some notes
--
+## Some notes
 
 - Grin uses composer to provide their extension to the end customer.
 - The extension follows semver principles.
 - Once the new implementation of Grin_Affiliate is ready to be installed and tested it will get version 2.0.x.
 - If an end-user has the previous version of the extension installed via https://docs.magento.com/user-guide/v2.3/system/web-setup-wizard.html or manually in app/code, the extension must be removed before new installation.
 
-Q&A
--
+## Q&A
 
 1. Issue: I updated the extension, but it seems like the old version is installed despite the fact that in the compose.lock file I see the updated version of the extension.
 
@@ -56,16 +69,59 @@ Possible solution: in this case, according to Magento documentation, you need to
 ...
 ```
 
-Local Development
--
+## Local Development
 
 This module uses Docker for local development. Follow these steps to set up your development environment:
 
 ### Prerequisites
 
-1. Docker and Docker Compose installed on your machine
-2. Magento Marketplace credentials
-3. GitHub Personal Access Token
+- Docker
+- Docker Compose
+- PHP 8.1 or higher
+- Composer
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   composer install
+   ```
+3. Copy the environment file:
+   ```bash
+   cp .env.example .env
+   ```
+4. Start the Docker containers:
+   ```bash
+   docker-compose up -d
+   ```
+5. Install the module:
+   ```bash
+   ./scripts/install-module.sh
+   ```
+
+### Installing Sample Data
+
+To populate your Magento store with sample products, categories, and other content, you can use the provided script:
+
+```bash
+./scripts/install-sample-data.sh
+```
+
+This script will:
+1. Set Magento to developer mode
+2. Install the sample data
+3. Run setup upgrade
+4. Clean and flush the cache
+
+After running this script, you'll have:
+- Sample products to test with
+- Categories
+- Customer accounts
+- Sales rules (including coupon codes)
+- And more
+
+This makes it easier to test functionality like coupon codes and other features that require store content.
 
 ### Port Configuration
 
@@ -135,6 +191,19 @@ These ports are automatically configured during setup to avoid conflicts with ot
   - Username: `admin`
   - Password: `admin123`
 
+#### After Code Changes
+
+When you modify plugin code or other PHP files:
+1. Clear the Magento cache:
+   ```bash
+   cd .docker-magento
+   bin/clinotty bin/magento cache:clean
+   bin/clinotty bin/magento cache:flush
+   ```
+2. Refresh your browser page
+
+> **Note**: In developer mode, you don't need to run `setup:di:compile` after every change. However, if you're in production mode, you would need to run it.
+
 ### Troubleshooting
 
 If you encounter any issues:
@@ -159,6 +228,24 @@ If you encounter any issues:
    bin/clinotty tail -f var/log/system.log
    ```
 
-### Credits
+### Running Unit Tests
 
-This local development setup is based on [markshust/docker-magento](https://github.com/markshust/docker-magento). 
+To run unit tests for this module, use the provided script:
+
+```bash
+./scripts/run-tests.sh
+```
+
+- This will run all tests in the `Test` directory.
+
+To run a specific test file, provide the relative path from the module root:
+
+```bash
+./scripts/run-tests.sh Test/Unit/Plugin/Magento/SalesRule/Model/RulesApplier/ValidateByTokenTest.php
+```
+
+The script will automatically execute the tests inside the Docker container using the correct environment.
+
+## Credits
+
+This local development setup is based on [markshust/docker-magento](https://github.com/markshust/docker-magento).
