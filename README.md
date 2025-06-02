@@ -10,6 +10,8 @@ Influencer marketing for ecommerce. For more information go to https://grin.co/
 - [Q&A](#qa)
 - [Local Development](#local-development)
   - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Installing Sample Data](#installing-sample-data)
   - [Port Configuration](#port-configuration)
   - [Getting Required Credentials](#getting-required-credentials)
   - [Setup Steps](#setup-steps)
