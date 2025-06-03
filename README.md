@@ -1,21 +1,21 @@
-# Grin Module
+# Grin Module <!-- omit from toc -->
 
 Influencer marketing for ecommerce. For more information go to https://grin.co/
 
-## Table of Contents
+## Table of Contents <!-- omit from toc -->
 
 - [Install](#install)
 - [Update](#update)
 - [Some notes](#some-notes)
-- [Q&A](#qa)
+- [Q\&A](#qa)
 - [Local Development](#local-development)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Installing Sample Data](#installing-sample-data)
   - [Port Configuration](#port-configuration)
   - [Getting Required Credentials](#getting-required-credentials)
   - [Setup Steps](#setup-steps)
   - [Development Workflow](#development-workflow)
+  - [Installing Sample Data](#installing-sample-data)
+    - [After Code Changes](#after-code-changes)
   - [Troubleshooting](#troubleshooting)
   - [Running Unit Tests](#running-unit-tests)
 - [Credits](#credits)
@@ -79,49 +79,6 @@ This module uses Docker for local development. Follow these steps to set up your
 - Docker Compose
 - PHP 8.1 or higher
 - Composer
-
-### Installation
-
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   composer install
-   ```
-3. Copy the environment file:
-   ```bash
-   cp .env.example .env
-   ```
-4. Start the Docker containers:
-   ```bash
-   docker-compose up -d
-   ```
-5. Install the module:
-   ```bash
-   ./scripts/install-module.sh
-   ```
-
-### Installing Sample Data
-
-To populate your Magento store with sample products, categories, and other content, you can use the provided script:
-
-```bash
-./scripts/install-sample-data.sh
-```
-
-This script will:
-1. Set Magento to developer mode
-2. Install the sample data
-3. Run setup upgrade
-4. Clean and flush the cache
-
-After running this script, you'll have:
-- Sample products to test with
-- Categories
-- Customer accounts
-- Sales rules (including coupon codes)
-- And more
-
-This makes it easier to test functionality like coupon codes and other features that require store content.
 
 ### Port Configuration
 
@@ -190,6 +147,29 @@ These ports are automatically configured during setup to avoid conflicts with ot
 - Admin panel is available at `https://magento.grin.co.test:8443/admin`
   - Username: `admin`
   - Password: `admin123`
+
+### Installing Sample Data
+
+To populate your Magento store with sample products, categories, and other content, you can use the provided script:
+
+```bash
+./scripts/install-sample-data.sh
+```
+
+This script will:
+1. Set Magento to developer mode
+2. Install the sample data
+3. Run setup upgrade
+4. Clean and flush the cache
+
+After running this script, you'll have:
+- Sample products to test with
+- Categories
+- Customer accounts
+- Sales rules (including coupon codes)
+- And more
+
+This makes it easier to test functionality like coupon codes and other features that require store content.
 
 #### After Code Changes
 
