@@ -6,4 +6,4 @@ MAGENTO_MARKETPLACE_PUBLIC_KEY=your_public_key_here
 MAGENTO_MARKETPLACE_PRIVATE_KEY=your_private_key_here
 
 # GitHub token for Composer
-GITHUB_TOKEN=your_github_token_here 
+GITHUB_TOKEN=your_github_token_here

@@ -1,7 +1,20 @@
 #!/bin/bash
 
+# Exit on any error
+set -e
+
+# Magento version
+MAGENTO_VERSION="2.4.8"
+
 # Get the root directory (parent of scripts directory)
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Function to handle errors
+handle_error() {
+    echo "Error: Installation failed at step: $1"
+    echo "Please check the error message above and try again."
+    exit 1
+}
 
 # Check if we're in a Magento root directory
 if [ -f "$ROOT_DIR/bin/magento" ]; then
@@ -128,18 +141,9 @@ cd $MAGENTO_DIR
 echo "Downloading Magento..."
 echo "Note: This may take several minutes to complete..."
 
-# Set up authentication
-export COMPOSER_AUTH="{\"http-basic\":{\"repo.magento.com\":{\"username\":\"$MAGENTO_MARKETPLACE_PUBLIC_KEY\",\"password\":\"$MAGENTO_MARKETPLACE_PRIVATE_KEY\"}},\"github-oauth\":{\"github.com\":\"$GITHUB_TOKEN\"}}"
-
-# Set up GitHub token in container
-bin/clinotty composer config -g github-oauth.github.com "$GITHUB_TOKEN"
-
 # Patch bin/download to add timeout and other flags to composer create-project
 sed -i '' 's|composer create-project --repository-url=https://repo.mage-os.org/ mage-os/project-community-edition="${VERSION}" \.|composer create-project --no-progress --prefer-dist --repository-url=https://repo.mage-os.org/ mage-os/project-community-edition="${VERSION}" .|' "$MAGENTO_DIR/bin/download"
 sed -i '' 's|composer create-project --repository=https://repo.magento.com/ magento/project-"${EDITION}"-edition="${VERSION}" \.|composer create-project --no-progress --prefer-dist --repository=https://repo.magento.com/ magento/project-"${EDITION}"-edition="${VERSION}" .|' "$MAGENTO_DIR/bin/download"
-
-# Set composer timeout
-bin/clinotty composer config -g process-timeout 2000
 
 # Patch bin/setup to use absolute paths for magento.env
 sed -i '' 's|if \[ -f "\.\.\/env\/magento\.env" \]; then|SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" \&\& pwd)"\nif [ -f "$SCRIPT_DIR/../env/magento.env" ]; then|' "$MAGENTO_DIR/bin/setup"
@@ -153,18 +157,44 @@ sed -i '' 's|https://${DOMAIN}/admin/|https://${DOMAIN}:8443/admin/|' "$MAGENTO_
 sed -i '' 's|--base-url=https://"$DOMAIN"/|--base-url=https://"$DOMAIN":8443/|' "$MAGENTO_DIR/bin/setup-install"
 sed -i '' 's|--base-url-secure=https://"$DOMAIN"/|--base-url-secure=https://"$DOMAIN":8443/|' "$MAGENTO_DIR/bin/setup-install"
 
+# Start the containers to inject the environment variables
+bin/start --no-dev
+
+# Wait for containers to be ready
+echo "Waiting for containers to be ready..."
+sleep 10
+
+# Set up authentication in the correct order
+echo "Setting up authentication..."
+
+# Create a temporary Composer home directory in the container
+bin/clinotty bash << EOF
+mkdir -p /var/www/.composer-temp
+export COMPOSER_HOME=/var/www/.composer-temp
+
+# Set up GitHub token
+composer config --global github-oauth.github.com "${GITHUB_TOKEN}"
+
+# Set up Magento Marketplace credentials
+composer config --global http-basic.repo.magento.com "${MAGENTO_MARKETPLACE_PUBLIC_KEY}" "${MAGENTO_MARKETPLACE_PRIVATE_KEY}"
+
+# Copy the auth.json to the correct location
+cp /var/www/.composer-temp/auth.json /var/www/.composer/auth.json
+EOF
+[ $? -eq 0 ] || handle_error "Setting up authentication"
+
 # Run download inside the container
-bin/download community 2.4.8
+bin/download community "$MAGENTO_VERSION" || handle_error "Downloading Magento"
 
 # Then run the setup with the domain parameter
-bin/setup "magento.grin.co.test"
+bin/setup "magento.grin.co.test" || handle_error "Setting up Magento"
 
 # Update web configuration to use correct port
-bin/clinotty bin/magento config:set web/secure/base_url "https://magento.grin.co.test:8443/"
-bin/clinotty bin/magento config:set web/unsecure/base_url "https://magento.grin.co.test:8443/"
-bin/clinotty bin/magento config:set web/secure/use_in_frontend 1
-bin/clinotty bin/magento config:set web/secure/use_in_adminhtml 1
-bin/clinotty bin/magento cache:flush
+bin/clinotty bin/magento config:set web/secure/base_url "https://magento.grin.co.test:8443/" || handle_error "Setting secure base URL"
+bin/clinotty bin/magento config:set web/unsecure/base_url "https://magento.grin.co.test:8443/" || handle_error "Setting unsecure base URL"
+bin/clinotty bin/magento config:set web/secure/use_in_frontend 1 || handle_error "Setting secure frontend"
+bin/clinotty bin/magento config:set web/secure/use_in_adminhtml 1 || handle_error "Setting secure admin"
+bin/clinotty bin/magento cache:flush || handle_error "Flushing cache"
 
 # Add module volume mount to Docker Compose
 echo "Adding module volume mount to Docker Compose..."
@@ -172,28 +202,31 @@ cat << EOF | sed -i '' '/volumes:/r /dev/stdin' "$MAGENTO_DIR/compose.yaml"
       - ${ROOT_DIR}:/var/www/html/app/code/Grin/Module:delegated,exclude=.docker-magento
 EOF
 
+# Restart containers to apply volume mount
+bin/restart
+
 # Enable and setup our module
 echo "Setting up GRIN module..."
-bin/clinotty bin/magento module:enable Grin_Module --force
-bin/clinotty bin/magento setup:upgrade
-bin/clinotty bin/magento setup:di:compile
-bin/clinotty bin/magento setup:static-content:deploy -f
-bin/clinotty bin/magento cache:flush
-bin/clinotty bin/magento cron:run
+bin/clinotty bin/magento module:enable Grin_Module --force || handle_error "Enabling module"
+bin/clinotty bin/magento setup:upgrade || handle_error "Running setup:upgrade"
+bin/clinotty bin/magento setup:di:compile || handle_error "Running setup:di:compile"
+bin/clinotty bin/magento setup:static-content:deploy -f || handle_error "Deploying static content"
+bin/clinotty bin/magento cache:flush || handle_error "Flushing cache"
+bin/clinotty bin/magento cron:run || handle_error "Running cron"
 
 # Install Magento coding standard
 echo "Installing Magento coding standard..."
-bin/clinotty composer require --dev magento/magento-coding-standard
+bin/clinotty composer require --dev magento/magento-coding-standard || handle_error "Installing coding standard"
 
 # Verify module installation
 echo "Verifying module installation..."
-bin/clinotty bin/magento module:status Grin_Module
+bin/clinotty bin/magento module:status Grin_Module || handle_error "Verifying module status"
 
 # Disable Two-Factor Authentication
 echo "Disabling Two-Factor Authentication..."
-bin/clinotty bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
-bin/clinotty bin/magento setup:upgrade
-bin/clinotty bin/magento cache:flush
+bin/clinotty bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth || handle_error "Disabling 2FA"
+bin/clinotty bin/magento setup:upgrade || handle_error "Running setup:upgrade after 2FA"
+bin/clinotty bin/magento cache:flush || handle_error "Final cache flush"
 
 echo ""
 echo "Install complete."
