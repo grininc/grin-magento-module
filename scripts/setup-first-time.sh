@@ -169,17 +169,23 @@ echo "Setting up authentication..."
 
 # Create a temporary Composer home directory in the container
 bin/clinotty bash << EOF
+set -e
+
+# Create temporary and permanent Composer directories
 mkdir -p /var/www/.composer-temp
+mkdir -p /var/www/.composer
+
+# Set up temporary Composer home
 export COMPOSER_HOME=/var/www/.composer-temp
 
 # Set up GitHub token
-composer config --global github-oauth.github.com "${GITHUB_TOKEN}"
+composer config --global github-oauth.github.com "${GITHUB_TOKEN}" || exit 1
 
 # Set up Magento Marketplace credentials
-composer config --global http-basic.repo.magento.com "${MAGENTO_MARKETPLACE_PUBLIC_KEY}" "${MAGENTO_MARKETPLACE_PRIVATE_KEY}"
+composer config --global http-basic.repo.magento.com "${MAGENTO_MARKETPLACE_PUBLIC_KEY}" "${MAGENTO_MARKETPLACE_PRIVATE_KEY}" || exit 1
 
 # Copy the auth.json to the correct location
-cp /var/www/.composer-temp/auth.json /var/www/.composer/auth.json
+cp /var/www/.composer-temp/auth.json /var/www/.composer/auth.json || exit 1
 EOF
 [ $? -eq 0 ] || handle_error "Setting up authentication"
 
@@ -204,6 +210,10 @@ EOF
 
 # Restart containers to apply volume mount
 bin/restart
+
+# Wait for containers to be ready
+echo "Waiting for containers to be ready..."
+sleep 10
 
 # Enable and setup our module
 echo "Setting up GRIN module..."
