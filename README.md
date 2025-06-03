@@ -18,6 +18,7 @@ Influencer marketing for ecommerce. For more information go to https://grin.co/
     - [After Code Changes](#after-code-changes)
   - [Troubleshooting](#troubleshooting)
   - [Running Unit Tests](#running-unit-tests)
+  - [Running Coding Standards](#running-coding-standards)
 - [Credits](#credits)
 
 ## Install
@@ -225,6 +226,28 @@ To run a specific test file, provide the relative path from the module root:
 ```
 
 The script will automatically execute the tests inside the Docker container using the correct environment.
+
+### Running Coding Standards
+
+To check your code against Magento's coding standards, use the provided script:
+
+```bash
+./scripts/run-coding-standard.sh
+```
+
+- This will check all files in the module against Magento's coding standards.
+- Generated code and Docker-related files are automatically ignored.
+
+To check a specific file, provide the relative path from the module root:
+
+```bash
+./scripts/run-coding-standard.sh Test/Unit/Plugin/Magento/SalesRule/Model/RulesApplier/ValidateByTokenTest.php
+```
+
+The script will:
+1. Run the coding standard check inside the Docker container
+2. Generate a detailed report
+3. Display any warnings or errors found
 
 ## Credits
 

@@ -181,6 +181,10 @@ bin/clinotty bin/magento setup:static-content:deploy -f
 bin/clinotty bin/magento cache:flush
 bin/clinotty bin/magento cron:run
 
+# Install Magento coding standard
+echo "Installing Magento coding standard..."
+bin/clinotty composer require --dev magento/magento-coding-standard
+
 # Verify module installation
 echo "Verifying module installation..."
 bin/clinotty bin/magento module:status Grin_Module
