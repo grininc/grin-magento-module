@@ -10,7 +10,6 @@ use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\RulesApplier;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidateByTokenTest extends TestCase
 {
@@ -33,7 +32,9 @@ class ValidateByTokenTest extends TestCase
         $this->validateByToken = new ValidateByToken($this->salesRuleValidator);
     }
 
-    #[DataProvider('couponCodeProvider')]
+    /**
+     * @dataProvider couponCodeProvider
+     */
     public function testAroundApplyRules(mixed $couponCode): void
     {
         /** @var RulesApplier&MockObject $subject */
@@ -78,7 +79,9 @@ class ValidateByTokenTest extends TestCase
         ];
     }
 
-    #[DataProvider('couponCodeProvider')]
+    /**
+     * @dataProvider couponCodeProvider
+     */
     public function testAroundApplyRulesWithInvalidRule(mixed $couponCode): void
     {
         /** @var RulesApplier&MockObject $subject */
