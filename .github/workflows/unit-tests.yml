@@ -12,5 +12,5 @@ jobs:
                 composer_name: grin/module
                 module_name: Grin_Module
                 php_version: 8.3
-                magento_version: 2.4.7
+                magento_version: 2.4.8
                 project_name: magento/project-community-edition 
