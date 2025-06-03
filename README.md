@@ -15,7 +15,7 @@ Influencer marketing for ecommerce. For more information go to https://grin.co/
   - [Setup Steps](#setup-steps)
   - [Development Workflow](#development-workflow)
   - [Installing Sample Data](#installing-sample-data)
-    - [After Code Changes](#after-code-changes)
+  - [After Code Changes](#after-code-changes)
   - [Troubleshooting](#troubleshooting)
   - [Running Unit Tests](#running-unit-tests)
   - [Running Coding Standards](#running-coding-standards)
@@ -172,7 +172,7 @@ After running this script, you'll have:
 
 This makes it easier to test functionality like coupon codes and other features that require store content.
 
-#### After Code Changes
+### After Code Changes
 
 When you modify plugin code or other PHP files:
 1. Clear the Magento cache:
