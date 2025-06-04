@@ -56,7 +56,7 @@ cd $MAGENTO_DIR
 git init -qqq
 git remote add origin https://github.com/markshust/docker-magento
 git fetch origin -qqq
-git checkout 51020e8ea366e1bcccc4126c07a13caad5182c15 -- compose # points to origin/master v52.0.1
+git checkout 52.0.1 -- compose
 
 # Check if the compose directory exists
 if [ ! -d "compose" ]; then
