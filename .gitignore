@@ -11,3 +11,4 @@ bin/
 env/
 template/
 
+.phpunit.result.cache
