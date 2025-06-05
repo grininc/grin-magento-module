@@ -1,0 +1,30 @@
+name: Deploy Magento Module to Staging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Deploy and update module on Magento server
+        env:
+          SSH_USER: ${{ secrets.MAGENTO_DEPLOY_USER }}
+          SSH_PASS: ${{ secrets.MAGENTO_DEPLOY_PASSWORD }}
+          SSH_HOST: ${{ secrets.MAGENTO_DEPLOY_HOST }}
+        run: |
+          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
+            cd aa9a24c83b.nxcli.net &&
+            composer update grin/module --ignore-platform-reqs &&
+            bin/magento setup:upgrade &&
+            bin/magento setup:di:compile &&
+            bin/magento setup:static-content:deploy &&
+            bin/magento cache:flush
+          "
