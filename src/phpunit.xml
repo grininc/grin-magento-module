@@ -7,17 +7,17 @@
          stderr="true">
     <testsuites>
         <testsuite name="UnitTests">
-            <directory suffix="Test.php">../../../vendor/grin/module/Test/Unit</directory>
+            <directory suffix="Test.php">app/code/Grin/Module/Test/Unit</directory>
         </testsuite>
     </testsuites>
     <coverage>
         <include>
-            <directory suffix=".php">../../../vendor/grin/module</directory>
+            <directory suffix=".php">app/code/Grin/Module</directory>
         </include>
         <exclude>
-            <directory>../../../lib/internal/*/*/Test</directory>
-            <directory>../../../lib/internal/*/*/*/Test</directory>
-            <directory>../../../setup/src/*/*/Test</directory>
+            <directory>lib/internal/*/*/Test</directory>
+            <directory>lib/internal/*/*/*/Test</directory>
+            <directory>setup/src/*/*/Test</directory>
         </exclude>
     </coverage>
     <php>

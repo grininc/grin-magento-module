@@ -205,7 +205,7 @@ bin/clinotty bin/magento cache:flush || handle_error "Flushing cache"
 # Add module volume mount to Docker Compose
 echo "Adding module volume mount to Docker Compose..."
 cat << EOF | sed -i '' '/volumes:/r /dev/stdin' "$MAGENTO_DIR/compose.yaml"
-      - ${ROOT_DIR}:/var/www/html/app/code/Grin/Module:delegated,exclude=.docker-magento
+      - ${ROOT_DIR}/src:/var/www/html/app/code/Grin/Module:delegated
 EOF
 
 # Restart containers to apply volume mount
@@ -240,3 +240,7 @@ bin/clinotty bin/magento cache:flush || handle_error "Final cache flush"
 
 echo ""
 echo "Install complete."
+echo "You can access Magento at https://magento.grin.co.test:8443"
+echo "Admin URL: https://magento.grin.co.test:8443/admin"
+echo "Admin credentials: admin/admin123"
+echo ""
