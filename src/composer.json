@@ -19,6 +19,9 @@
         ],
         "psr-4": {
             "Grin\\Module\\": ""
-        }
+        },
+        "exclude-from-classmap": [
+            "/Test/"
+        ]
     }
 }
