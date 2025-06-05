@@ -19,9 +19,10 @@ jobs:
           SSH_USER: ${{ secrets.MAGENTO_DEPLOY_USER }}
           SSH_PASS: ${{ secrets.MAGENTO_DEPLOY_PASSWORD }}
           SSH_HOST: ${{ secrets.MAGENTO_DEPLOY_HOST }}
+          SSH_PATH: ${{ secrets.MAGENTO_APP_PATH }}
         run: |
           sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
-            cd $SSH_HOST &&
+            cd $SSH_PATH &&
             composer update grin/module --ignore-platform-reqs &&
             bin/magento setup:upgrade &&
             bin/magento setup:di:compile &&
