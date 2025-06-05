@@ -6,6 +6,7 @@ Influencer marketing for ecommerce. For more information go to https://grin.co/
 
 - [Install](#install)
 - [Update](#update)
+- [Deploy to Staging via GitHub Actions](#deploy-to-staging-via-github-actions)
 - [Some notes](#some-notes)
 - [Q\&A](#qa)
 - [Local Development](#local-development)
@@ -19,7 +20,7 @@ Influencer marketing for ecommerce. For more information go to https://grin.co/
   - [Troubleshooting](#troubleshooting)
   - [Running Unit Tests](#running-unit-tests)
   - [Running Coding Standards](#running-coding-standards)
-- [Credits](#credits)
+  - [Credits](#credits)
 
 ## Install
 
@@ -37,6 +38,10 @@ Influencer marketing for ecommerce. For more information go to https://grin.co/
 3. bin/magento setup:di:compile
 4. bin/magento setup:static-content:deploy
 5. bin/magento cache:flush
+
+## Deploy to Staging via GitHub Actions
+
+This repository includes a GitHub Actions workflow (.github/workflows/deploy-module-staging.yml) that automates deployment of the latest code from the main branch to staging by connecting via SSH using stored credentials, updating the module via Composer, and running required Magento deployment commands.
 
 ## Some notes
 
@@ -249,6 +254,6 @@ The script will:
 2. Generate a detailed report
 3. Display any warnings or errors found
 
-## Credits
+### Credits
 
 This local development setup is based on [markshust/docker-magento](https://github.com/markshust/docker-magento).
