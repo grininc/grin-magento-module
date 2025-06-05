@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# Get the root directory (parent of scripts directory)
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
 # Change to .docker-magento directory
-cd "$ROOT_DIR/.docker-magento"
+cd "$HOME/.docker-magento"
 
 if [ -z "$1" ]; then
     # No parameter: run all tests in the Test directory
@@ -18,4 +15,4 @@ else
     ./bin/clinotty vendor/bin/phpunit --configuration /var/www/html/app/code/Grin/Module/phpunit.xml --list-tests "/var/www/html/app/code/Grin/Module/$1"
     echo -e "\nRunning tests:"
     ./bin/clinotty vendor/bin/phpunit --configuration /var/www/html/app/code/Grin/Module/phpunit.xml "/var/www/html/app/code/Grin/Module/$1"
-fi 
+fi

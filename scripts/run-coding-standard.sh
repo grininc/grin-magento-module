@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# Get the root directory (parent of scripts directory)
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
 # Change to .docker-magento directory
-cd "$ROOT_DIR/.docker-magento"
+cd "$HOME/.docker-magento"
 
 # Get the file path if provided
 FILE_PATH="$1"

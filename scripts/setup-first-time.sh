@@ -42,7 +42,7 @@ if [ -z "$MAGENTO_MARKETPLACE_PUBLIC_KEY" ] || [ -z "$MAGENTO_MARKETPLACE_PRIVAT
 fi
 
 # Create a directory for the Magento installation
-MAGENTO_DIR="$ROOT_DIR/.docker-magento"
+MAGENTO_DIR="$HOME/.docker-magento"
 if [ -d "$MAGENTO_DIR" ]; then
     echo "Error: Directory $MAGENTO_DIR already exists"
     echo "Please remove it before running this script."

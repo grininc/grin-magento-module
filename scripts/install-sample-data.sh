@@ -4,7 +4,7 @@
 set -e
 
 # Change to the Magento root directory
-cd .docker-magento
+cd "$HOME/.docker-magento"
 
 echo "Setting developer mode..."
 bin/magento deploy:mode:set developer

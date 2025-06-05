@@ -20,6 +20,7 @@ Influencer marketing for ecommerce. For more information go to https://grin.co/
   - [Troubleshooting](#troubleshooting)
   - [Running Unit Tests](#running-unit-tests)
   - [Running Coding Standards](#running-coding-standards)
+  - [Cleanup](#cleanup)
   - [Credits](#credits)
 
 ## Install
@@ -253,6 +254,24 @@ The script will:
 1. Run the coding standard check inside the Docker container
 2. Generate a detailed report
 3. Display any warnings or errors found
+
+### Cleanup
+
+If you want to completely remove your local Magento development environment, follow these steps:
+
+1. **Stop and remove Docker containers and volumes:**
+   ```bash
+   docker compose -f $HOME/.docker-magento/compose.yaml down -v
+   ```
+   This will stop and remove all containers and associated Docker volumes for your Magento environment.
+
+2. **Remove the Docker Magento workspace directory:**
+   ```bash
+   rm -rf $HOME/.docker-magento
+   ```
+   This will delete all files related to the local Docker Magento environment, including configuration, data, and any persistent files.
+
+> **Note:** This process will remove your local Magento instance, database, and all related data. Only do this if you are sure you want a full reset.
 
 ### Credits
 
