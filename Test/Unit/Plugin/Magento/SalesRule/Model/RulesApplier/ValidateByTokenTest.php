@@ -51,7 +51,7 @@ class ValidateByTokenTest extends TestCase
 
         $this->salesRuleValidator->expects($this->once())
             ->method('isValid')
-            ->with($rule, is_array($couponCode) ? $couponCode : [$couponCode])
+            ->with($rule, $couponCode)
             ->willReturn(true);
 
         $result = $this->validateByToken->aroundApplyRules(
@@ -98,7 +98,7 @@ class ValidateByTokenTest extends TestCase
 
         $this->salesRuleValidator->expects($this->once())
             ->method('isValid')
-            ->with($rule, is_array($couponCode) ? $couponCode : [$couponCode])
+            ->with($rule, $couponCode)
             ->willReturn(false);
 
         $result = $this->validateByToken->aroundApplyRules(

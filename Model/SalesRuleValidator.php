@@ -33,14 +33,15 @@ class SalesRuleValidator
 
     /**
      * @param  Rule  $rule
-     * @param  array $couponCode
+     * @param  string|array $couponCode
      * @return bool
      */
-    public function isValid(Rule $rule, array $couponCode): bool
+    public function isValid(Rule $rule, $couponCode): bool
     {
         $code = $rule->getPrimaryCoupon()->getCode();
+        $couponCodes = is_array($couponCode) ? $couponCode : [$couponCode];
 
-        if ($code !== null && $rule->getData('is_grin_only') && in_array($code, $couponCode)) {
+        if ($code !== null && $rule->getData('is_grin_only') && in_array($code, $couponCodes)) {
             return $this->request->getHeader(self::TOKEN_HEADER) === $this->systemConfig->getSalesRuleToken();
         }
 

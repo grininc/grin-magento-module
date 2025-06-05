@@ -40,15 +40,12 @@ class ValidateByToken
         $skipValidation,
         $couponCode
     ): array {
-        // Convert string coupon code to array for consistent handling
-        $couponCodes = is_array($couponCode) ? $couponCode : [$couponCode];
-
         foreach ($rules as $rule) {
-            if (!$this->salesRuleValidator->isValid($rule, $couponCodes)) {
-                return $proceed($item, [], $skipValidation, $couponCodes);
+            if (!$this->salesRuleValidator->isValid($rule, $couponCode)) {
+                return $proceed($item, [], $skipValidation, $couponCode);
             }
         }
 
-        return $proceed($item, $rules, $skipValidation, $couponCodes);
+        return $proceed($item, $rules, $skipValidation, $couponCode);
     }
 }
