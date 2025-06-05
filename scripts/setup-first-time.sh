@@ -208,6 +208,13 @@ cat << EOF | sed -i '' '/volumes:/r /dev/stdin' "$MAGENTO_DIR/compose.yaml"
       - ${ROOT_DIR}/src:/var/www/html/app/code/Grin/Module:delegated
 EOF
 
+# After mounting the module volume, copy composer.json and composer.lock into the container
+cp ${ROOT_DIR}/composer.json ${ROOT_DIR}/src/composer.json
+cp ${ROOT_DIR}/composer.lock ${ROOT_DIR}/src/composer.lock
+
+# Update the autoload psr-4 path in the module's composer.json from 'src/' to ''
+sed -i '' 's|"Grin\\\\Module\\\\\": \"src/\"|"Grin\\\\Module\\\\\": \"\"|g' ${ROOT_DIR}/src/composer.json
+
 # Restart containers to apply volume mount
 bin/restart
 

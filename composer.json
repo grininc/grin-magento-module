@@ -1,0 +1,27 @@
+{
+    "name": "grin/module",
+    "description": "Grin (https://grin.co/) extension for magento 2",
+    "require": {
+        "php": "^7.2|^7.4|^8.0|^8.1"
+    },
+    "type": "magento2-module",
+    "version": "2.1.9",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Grin dev team",
+            "email": "support@grin.co"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Grin\\Module\\": "src/"
+        },
+        "exclude-from-classmap": [
+            "/Test/"
+        ]
+    }
+}

@@ -12,3 +12,6 @@ env/
 template/
 
 .phpunit.result.cache
+
+src/composer.json
+src/composer.lock
