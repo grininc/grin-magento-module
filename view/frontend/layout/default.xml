@@ -6,7 +6,7 @@
     <body>
         <referenceBlock name="before.body.end">
             <block class="Grin\Module\Block\Footer\FooterScript"
-                   name="footer.misc.script"
+                   name="footer_misc_script"
                    template="Grin_Module::affiliate/footer.phtml"/>
         </referenceBlock>
     </body>

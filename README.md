@@ -1,5 +1,13 @@
 # Grin Module <!-- omit from toc -->
 
+[![M2 Coding Standard](https://github.com/grininc/grin-magento-module/actions/workflows/coding-standard.yml/badge.svg?branch=main)](https://github.com/grininc/grin-magento-module/actions/workflows/coding-standard.yml)
+[![M2 Mess Detector](https://github.com/grininc/grin-magento-module/actions/workflows/mess-detector.yml/badge.svg?branch=main)](https://github.com/grininc/grin-magento-module/actions/workflows/mess-detector.yml)
+
+![PHP Version](https://img.shields.io/badge/php-7.2%20|%207.3%20|%207.4%20|%208.1-blue)
+<img src="https://img.shields.io/badge/magento-2.3.X-brightgreen.svg?logo=magento&longCache=true" alt="Supported Magento Versions" />
+<img src="https://img.shields.io/badge/magento-2.4.X-brightgreen.svg?logo=magento&longCache=true" alt="Supported Magento Versions" />
+![License](https://img.shields.io/github/license/drpayyne/docker-php)
+
 Influencer marketing for ecommerce. For more information go to https://grin.co/
 
 ## Table of Contents <!-- omit from toc -->
